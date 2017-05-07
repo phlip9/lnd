@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
+	"github.com/lightningnetwork/lnd/lnwire"
 	"github.com/lightningnetwork/lnd/shachain"
 	"github.com/roasbeef/btcd/btcec"
 	"github.com/roasbeef/btcd/wire"
@@ -316,7 +317,7 @@ func (c *OpenChannel) fullSync(tx *bolt.Tx) error {
 		return err
 	}
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, c.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, c.ChanID); err != nil {
 		return err
 	}
 	if chanIndexBucket.Get(b.Bytes()) == nil {
@@ -678,7 +679,7 @@ func (c *OpenChannel) CloseChannel() error {
 		}
 
 		var b bytes.Buffer
-		if err := writeOutpoint(&b, c.ChanID); err != nil {
+		if err := lnwire.WriteOutPoint(&b, c.ChanID); err != nil {
 			return err
 		}
 
@@ -963,7 +964,7 @@ func putChanCapacity(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	scratch3 := make([]byte, 8)
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1008,7 +1009,7 @@ func deleteChanCapacity(openChanBucket *bolt.Bucket, chanID []byte) error {
 func fetchChanCapacity(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	// A byte slice re-used to compute each key prefix below.
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1035,7 +1036,7 @@ func putChanMinFeePerKb(openChanBucket *bolt.Bucket, channel *OpenChannel) error
 	byteOrder.PutUint64(scratch, uint64(channel.MinFeePerKb))
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1051,7 +1052,7 @@ func putChanTheirDustLimit(openChanBucket *bolt.Bucket, channel *OpenChannel) er
 	byteOrder.PutUint64(scratch, uint64(channel.TheirDustLimit))
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1067,7 +1068,7 @@ func putChanOurDustLimit(openChanBucket *bolt.Bucket, channel *OpenChannel) erro
 	byteOrder.PutUint64(scratch, uint64(channel.OurDustLimit))
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1087,7 +1088,7 @@ func deleteChanMinFeePerKb(openChanBucket *bolt.Bucket, chanID []byte) error {
 
 func fetchChanMinFeePerKb(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1103,7 +1104,7 @@ func fetchChanMinFeePerKb(openChanBucket *bolt.Bucket, channel *OpenChannel) err
 
 func fetchChanTheirDustLimit(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1127,7 +1128,7 @@ func deleteChanTheirDustLimit(openChanBucket *bolt.Bucket, chanID []byte) error 
 
 func fetchChanOurDustLimit(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1154,7 +1155,7 @@ func putChanNumUpdates(openChanBucket *bolt.Bucket, channel *OpenChannel) error 
 	byteOrder.PutUint64(scratch, channel.NumUpdates)
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1174,7 +1175,7 @@ func deleteChanNumUpdates(openChanBucket *bolt.Bucket, chanID []byte) error {
 
 func fetchChanNumUpdates(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1193,7 +1194,7 @@ func putChanAmountsTransferred(openChanBucket *bolt.Bucket, channel *OpenChannel
 	scratch2 := make([]byte, 8)
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1226,7 +1227,7 @@ func deleteChanAmountsTransferred(openChanBucket *bolt.Bucket, chanID []byte) er
 
 func fetchChanAmountsTransferred(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1248,7 +1249,7 @@ func putChanIsPending(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	scratch := make([]byte, 2)
 
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1274,7 +1275,7 @@ func deleteChanIsPending(openChanBucket *bolt.Bucket, chanID []byte) error {
 
 func fetchChanIsPending(openChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1295,7 +1296,7 @@ func fetchChanIsPending(openChanBucket *bolt.Bucket, channel *OpenChannel) error
 func putChannelIDs(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	// TODO(roasbeef): just pass in chanID everywhere for puts
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1322,7 +1323,7 @@ func fetchChannelIDs(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 		b   bytes.Buffer
 	)
 
-	if err = writeOutpoint(&b, channel.ChanID); err != nil {
+	if err = lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1341,7 +1342,7 @@ func putChanCommitKeys(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error 
 	// Construct the key which stores the commitment keys: ckk || channelID.
 	// TODO(roasbeef): factor into func
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	commitKey := make([]byte, len(commitKeys)+bc.Len())
@@ -1373,7 +1374,7 @@ func fetchChanCommitKeys(nodeChanBucket *bolt.Bucket, channel *OpenChannel) erro
 	// Construct the key which stores the commitment keys: ckk || channelID.
 	// TODO(roasbeef): factor into func
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	commitKey := make([]byte, len(commitKeys)+bc.Len())
@@ -1394,7 +1395,7 @@ func fetchChanCommitKeys(nodeChanBucket *bolt.Bucket, channel *OpenChannel) erro
 
 func putChanCommitTxns(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	txnsKey := make([]byte, len(commitTxnsKey)+bc.Len())
@@ -1435,7 +1436,7 @@ func deleteChanCommitTxns(nodeChanBucket *bolt.Bucket, chanID []byte) error {
 func fetchChanCommitTxns(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var bc bytes.Buffer
 	var err error
-	if err = writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err = lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	txnsKey := make([]byte, len(commitTxnsKey)+bc.Len())
@@ -1471,7 +1472,7 @@ func fetchChanCommitTxns(nodeChanBucket *bolt.Bucket, channel *OpenChannel) erro
 
 func putChanFundingInfo(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	fundTxnKey := make([]byte, len(fundingTxnKey)+bc.Len())
@@ -1480,7 +1481,7 @@ func putChanFundingInfo(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error
 
 	var b bytes.Buffer
 
-	if err := writeOutpoint(&b, channel.FundingOutpoint); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.FundingOutpoint); err != nil {
 		return err
 	}
 
@@ -1534,7 +1535,7 @@ func deleteChanFundingInfo(nodeChanBucket *bolt.Bucket, chanID []byte) error {
 
 func fetchChanFundingInfo(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 	fundTxnKey := make([]byte, len(fundingTxnKey)+b.Len())
@@ -1545,7 +1546,8 @@ func fetchChanFundingInfo(nodeChanBucket *bolt.Bucket, channel *OpenChannel) err
 
 	// TODO(roasbeef): can remove as channel ID *is* the funding point now.
 	channel.FundingOutpoint = &wire.OutPoint{}
-	if err := readOutpoint(infoBytes, channel.FundingOutpoint); err != nil {
+	err := lnwire.ReadOutPoint(infoBytes, channel.FundingOutpoint)
+	if err != nil {
 		return err
 	}
 
@@ -1630,7 +1632,7 @@ func putChanPreimageState(nodeChanBucket *bolt.Bucket, channel *OpenChannel) err
 	}
 
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 
@@ -1649,7 +1651,7 @@ func deleteChanPreimageState(nodeChanBucket *bolt.Bucket, chanID []byte) error {
 
 func fetchChanPreimageState(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 	preimageKey := make([]byte, len(preimageStateKey)+b.Len())
@@ -1692,7 +1694,7 @@ func fetchChanPreimageState(nodeChanBucket *bolt.Bucket, channel *OpenChannel) e
 
 func putChanDeliveryScripts(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var bc bytes.Buffer
-	if err := writeOutpoint(&bc, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&bc, channel.ChanID); err != nil {
 		return err
 	}
 	deliveryKey := make([]byte, len(deliveryScriptsKey)+bc.Len())
@@ -1719,7 +1721,7 @@ func deleteChanDeliveryScripts(nodeChanBucket *bolt.Bucket, chanID []byte) error
 
 func fetchChanDeliveryScripts(nodeChanBucket *bolt.Bucket, channel *OpenChannel) error {
 	var b bytes.Buffer
-	if err := writeOutpoint(&b, channel.ChanID); err != nil {
+	if err := lnwire.WriteOutPoint(&b, channel.ChanID); err != nil {
 		return err
 	}
 	deliveryKey := make([]byte, len(deliveryScriptsKey)+b.Len())
@@ -2010,38 +2012,6 @@ func wipeChannelLogEntries(log *bolt.Bucket, o *wire.OutPoint) error {
 			return err
 		}
 	}
-
-	return nil
-}
-
-func writeOutpoint(w io.Writer, o *wire.OutPoint) error {
-	// TODO(roasbeef): make all scratch buffers on the stack
-	scratch := make([]byte, 4)
-
-	// TODO(roasbeef): write raw 32 bytes instead of wasting the extra
-	// byte.
-	if err := wire.WriteVarBytes(w, 0, o.Hash[:]); err != nil {
-		return err
-	}
-
-	byteOrder.PutUint32(scratch, o.Index)
-	_, err := w.Write(scratch)
-	return err
-}
-
-func readOutpoint(r io.Reader, o *wire.OutPoint) error {
-	scratch := make([]byte, 4)
-
-	txid, err := wire.ReadVarBytes(r, 0, 32, "prevout")
-	if err != nil {
-		return err
-	}
-	copy(o.Hash[:], txid)
-
-	if _, err := r.Read(scratch); err != nil {
-		return err
-	}
-	o.Index = byteOrder.Uint32(scratch)
 
 	return nil
 }
