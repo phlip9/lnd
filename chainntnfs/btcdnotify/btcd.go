@@ -538,7 +538,7 @@ func (b *BtcdNotifier) checkConfirmationTrigger(txSha *chainhash.Hash,
 	if confClients, ok := b.confNotifications[*txSha]; ok {
 		// Either all of the registered confirmations wtill be
 		// dispatched due to a single confirmation, or added to the
-		// conf head. Therefor we unconditioanlly delete the registered
+		// conf head. Therefore we unconditionally delete the registered
 		// confirmations from the staging zone.
 		defer func() {
 			delete(b.confNotifications, *txSha)
